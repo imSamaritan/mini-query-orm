@@ -21,9 +21,6 @@ class Database {
         throw error
       }
     })()
-
-    //Run queries
-    this.$query.length > 0 ? this.run() : null
   }
 
   table(tableName) {
