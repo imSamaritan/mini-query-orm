@@ -2,10 +2,10 @@ const mysql = require("mysql2")
 const connectionDebugger = require("debug")("db:connection")
 
 const connect = async (settings) => {
-  const db = await mysql.createConnection(settings)
+  const db = mysql.createConnection(settings)
 
   db.connect((error) => {
-    if (error) throw err
+    if (error) throw new Error(error)
     else connectionDebugger(settings)
   })
 
