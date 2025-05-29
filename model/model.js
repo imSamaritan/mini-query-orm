@@ -32,6 +32,14 @@ class Database {
     const props = Object.keys(this)
     for (const prop of props) {
       if (prop.startsWith("$")) {
+        if (Array.isArray(this[prop])) {
+          this[prop] = []
+        }
+
+        if (typeof this[prop] === "object") {
+          this[prop] = {}
+        }
+
         this[prop] = ""
       }
     }
