@@ -1,13 +1,18 @@
 const api = require("./model/model")
+const exec = require("./execution/execute")
 
 //instantiate Database
 const connectionString = process.env.CONNECTION
 
 //instantiate model and connect to Database
-const model = api.initDB(connectionString)
+const model = api.initDB(connectionString, exec)
 
 async function courses() {
-  return await model.table("courses").selectAll().order({ by: "name" })
+  return await model
+    .table("courses")
+    .selectAll()
+    .order({ by: ["name", "title"] })
+    .done()
 }
 
 async function display() {

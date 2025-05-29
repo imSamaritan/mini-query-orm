@@ -1,4 +1,6 @@
 function selectAll() {
+  this.$method = "selectAll"
+
   this.$select = `SELECT`
   this.$all = `* FROM ${this.$table}`
   this.$query = [this.$select, this.$all]
@@ -7,6 +9,7 @@ function selectAll() {
 }
 
 function order(details, order = "D") {
+
   if (order === "A") order = "ASC"
   else order = "DESC"
 
@@ -17,7 +20,7 @@ function order(details, order = "D") {
   }
   this.$query = [...this.$query, this.$orderBy]
 
-  return this.run()
+  return this
 }
 
 module.exports = {

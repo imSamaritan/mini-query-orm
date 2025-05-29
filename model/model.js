@@ -2,7 +2,8 @@ const { connect } = require("../db/db")
 const methods = require("../methods/methods")
 
 class Database {
-  constructor(credentials) {
+  constructor(credentials, exec) {
+    this.exec = exec
     this.$table = ""
     this.$query = []
 
@@ -10,6 +11,7 @@ class Database {
     this.$all = ""
     this.$where = ""
     this.$orderBy = ""
+    this.$method = ""
 
     this.dbConnection = (async () => {
       this.table(credentials.table)
@@ -45,19 +47,15 @@ class Database {
     }
   }
 
-  async run() {
-    const dbInstance = await this.dbConnection
+  async done() {
     const query = this.$query.join(" ") + ";"
-    const [data] = await dbInstance.execute(query)
-
-    this.reset()
-    return data
+    return await this.exec[this.$method](query, this)
   }
 }
 
 Object.assign(Database.prototype, methods)
 
-const initDB = (dsn) => {
+const initDB = (dsn, exec) => {
   let index = 0
   const credential = {}
 
@@ -79,7 +77,7 @@ const initDB = (dsn) => {
     }
   }
   const creds = getCredentials()
-  return new Database(creds)
+  return new Database(creds, exec)
 }
 
 module.exports = { initDB }
