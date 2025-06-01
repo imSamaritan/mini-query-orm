@@ -11,7 +11,7 @@ async function courses() {
   return await model
     .table("courses")
     .selectAll()
-    .order({ by: ["name", "title"] })
+    .order({ by: ["title"] }, "A")
     .done()
 }
 
