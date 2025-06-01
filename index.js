@@ -10,8 +10,9 @@ const model = api.initDB(connectionString, exec)
 async function courses() {
   return await model
     .table("courses")
-    .selectAll()
-    .order({ by: ["title"] }, "A")
+    .select(["id", "name", "title"])
+    .order({ by: "name" })
+    .limit(4)
     .done()
 }
 
