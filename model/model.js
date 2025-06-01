@@ -11,6 +11,7 @@ class Database {
     this.$all = ""
     this.$where = ""
     this.$orderBy = ""
+    this.$limit = ""
     this.$method = ""
 
     this.dbConnection = (async () => {

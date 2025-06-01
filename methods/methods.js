@@ -20,7 +20,18 @@ function order(details, order = "D") {
   return this
 }
 
+function limit(limit, offset = null) {
+  this.$limit = ` LIMIT ${limit} `
+  if (offset) {
+    this.$limit += ` OFFSET ${offset} `
+  }
+
+  this.$query = [...this.$query, this.$limit]
+  return this
+}
+
 module.exports = {
   selectAll,
   order,
+  limit,
 }
