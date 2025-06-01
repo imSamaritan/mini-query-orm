@@ -1,3 +1,14 @@
+function select(column) {
+  this.$method = "select"
+
+  if (Array.isArray(column)) {
+    column = column.join(", ")
+  }
+  this.$select = ` SELECT ${column} FROM ${this.$table} `
+  this.$query = [this.$select]
+  return this
+}
+
 function selectAll() {
   this.$method = "selectAll"
 
@@ -31,6 +42,7 @@ function limit(limit, offset = null) {
 }
 
 module.exports = {
+  select,
   selectAll,
   order,
   limit,
