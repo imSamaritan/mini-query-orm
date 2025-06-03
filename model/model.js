@@ -1,5 +1,7 @@
 const { connect } = require("../db/db")
 const methods = require("../methods/methods")
+const inspectQuery = require("debug")("mini-orm:query")
+const inspectBuilder = require("debug")("mini-orm:query-builder")
 
 class Database {
   constructor(credentials, exec) {
@@ -33,17 +35,19 @@ class Database {
 
   reset() {
     const props = Object.keys(this)
+    inspectQuery(`SQL: ${this.$query.join(" ")};`)
+
     for (const prop of props) {
       if (prop.startsWith("$")) {
+        inspectBuilder(`builder: [${prop}] : ${this[prop]}`)
+
         if (Array.isArray(this[prop])) {
           this[prop] = []
-        }
-
-        if (typeof this[prop] === "object") {
+        } else if (typeof this[prop] === "object" && this[prop] !== null) {
           this[prop] = {}
+        } else {
+          this[prop] = ""
         }
-
-        this[prop] = ""
       }
     }
   }
