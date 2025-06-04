@@ -11,7 +11,11 @@ async function courses() {
   return await model
     .table("courses")
     .select(["id", "name", "title"])
-    .where(["id", ">=", 2])
+    .where(["id", ">", 0])
+    .and()
+    .where(["title", "=", "'B'"])
+    .and()
+    .where(["name", "=", "'jack'"])
     .done()
 }
 

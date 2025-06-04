@@ -13,6 +13,7 @@ class Database {
     this.$select = ""
     this.$all = ""
     this.$where = "WHERE "
+    this.$and = "AND"
     this.$orderBy = ""
     this.$limit = ""
 
