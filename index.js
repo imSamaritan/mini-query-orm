@@ -11,11 +11,9 @@ async function courses() {
   return await model
     .table("courses")
     .select(["id", "name", "title"])
-    .where(["id", ">", 0])
-    .and()
-    .where(["title", "=", "'B'"])
-    .and()
-    .where(["name", "=", "'jack'"])
+    .where(["id", 0])
+    .or()
+    .where(["id", 3])
     .done()
 }
 

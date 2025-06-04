@@ -47,6 +47,12 @@ function and() {
   return this
 }
 
+function or() {
+  this.$where = ""
+  this.$query = [...this.$query, this.$or]
+  return this
+}
+
 function order(details, order = "D") {
   let orderby
 
@@ -84,6 +90,7 @@ module.exports = {
   selectAll,
   where,
   and,
+  or,
   order,
   limit,
 }

@@ -14,6 +14,7 @@ class Database {
     this.$all = ""
     this.$where = "WHERE "
     this.$and = "AND"
+    this.$or = "OR"
     this.$orderBy = ""
     this.$limit = ""
 
