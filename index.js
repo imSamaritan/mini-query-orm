@@ -11,8 +11,7 @@ async function courses() {
   return await model
     .table("courses")
     .select(["id", "name", "title"])
-    .order({ by: "name" }, 'a')
-    .limit(4)
+    .where(["id", ">=", 2])
     .done()
 }
 

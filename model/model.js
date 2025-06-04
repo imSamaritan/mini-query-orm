@@ -12,7 +12,7 @@ class Database {
 
     this.$select = ""
     this.$all = ""
-    this.$where = ""
+    this.$where = "WHERE "
     this.$orderBy = ""
     this.$limit = ""
 
@@ -54,7 +54,11 @@ class Database {
 
   async done() {
     const query = this.$query.join(" ") + ";"
-    return await this.exec[this.$method](query, this)
+    const results = await this.exec[this.$method](query, this)
+
+    this.reset()
+
+    return results
   }
 }
 
