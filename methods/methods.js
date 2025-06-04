@@ -20,21 +20,22 @@ function selectAll() {
 }
 
 function order(details, order = "D") {
-  if (order === "A") order = "ASC"
-  else order = "DESC"
+  if (order.toLocaleUpperCase() === "A") order = `ASC`
+  else order = `DESC`
 
   if (Array.isArray(details.by))
-    this.$orderBy = ` ORDER BY ${details.by.join(", ")} ${order} `
-  else this.$orderBy = ` ORDER BY ${details.by} ${order} `
+    this.$orderBy = `ORDER BY ${details.by.join(", ")} ${order}`
+  else this.$orderBy = `ORDER BY ${details.by} ${order}`
 
   this.$query = [...this.$query, this.$orderBy]
   return this
 }
 
 function limit(limit, offset = null) {
-  this.$limit = ` LIMIT ${limit} `
+  this.$limit = `LIMIT ${limit}`
+
   if (offset) {
-    this.$limit += ` OFFSET ${offset} `
+    this.$limit += `OFFSET ${offset}`
   }
 
   this.$query = [...this.$query, this.$limit]
