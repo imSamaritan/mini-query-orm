@@ -20,14 +20,23 @@ function selectAll() {
 }
 
 function order(details, order = "D") {
-  if (order.toLocaleUpperCase() === "A") order = `ASC`
-  else order = `DESC`
+  let orderby
 
-  if (Array.isArray(details.by))
-    this.$orderBy = `ORDER BY ${details.by.join(", ")} ${order}`
-  else this.$orderBy = `ORDER BY ${details.by} ${order}`
+  if (order.toLocaleUpperCase() === "A") {
+    order = `ASC`
+  } else {
+    order = `DESC`
+  }
 
+  if (Array.isArray(details.by)) {
+    orderby = details.by.join(", ")
+  } else {
+    orderby = details.by
+  }
+
+  this.$orderBy = `ORDER BY ${orderby} ${order}`
   this.$query = [...this.$query, this.$orderBy]
+
   return this
 }
 

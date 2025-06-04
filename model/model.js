@@ -7,6 +7,7 @@ class Database {
   constructor(credentials, exec) {
     this.exec = exec
     this.$table = ""
+    this.$method = ""
     this.$query = []
 
     this.$select = ""
@@ -14,7 +15,6 @@ class Database {
     this.$where = ""
     this.$orderBy = ""
     this.$limit = ""
-    this.$method = ""
 
     this.dbConnection = (async () => {
       this.table(credentials.table)
