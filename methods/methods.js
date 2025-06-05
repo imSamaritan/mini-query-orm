@@ -31,10 +31,10 @@ function where(_where = []) {
     return this
   } else if (_length === 2) {
     const [column, value] = _where
-    this.$where += `${column} = ${value}`
+    this.$where += `${column} = '${value}'`
   } else if (_length === 3) {
     const [column, operator, value] = _where
-    this.$where += `${column} ${operator} ${value}`
+    this.$where += `${column} ${operator} '${value}'`
   }
 
   this.$query = [...this.$query, this.$where]

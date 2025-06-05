@@ -13,9 +13,7 @@ async function courses() {
   return await model
     .table("courses")
     .select(["id", "name", "title"])
-    .like({ title: "C" }, "end")
-    .or()
-    .like({ id: 1 })
+    .where(["id", ">", 4])
     .done()
 }
 
