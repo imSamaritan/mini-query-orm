@@ -15,6 +15,7 @@ class Database {
     this.$where = "WHERE "
     this.$and = "AND"
     this.$or = "OR"
+    this.$like = "LIKE "
     this.$orderBy = ""
     this.$limit = ""
 
@@ -55,6 +56,8 @@ class Database {
   }
 
   async done() {
+    // this.reset()
+    // return
     const query = this.$query.join(" ") + ";"
     const results = await this.exec[this.$method](query, this)
 

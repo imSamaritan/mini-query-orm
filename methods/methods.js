@@ -53,6 +53,20 @@ function or() {
   return this
 }
 
+function like(_obj, matchFrom) {
+  const [key] = Object.keys(_obj)
+  this.$where += key
+
+  if (matchFrom === "start") this.$like += `'${_obj[key]}%'`
+  if (matchFrom === "end") this.$like += `'%${_obj[key]}'`
+  if (!matchFrom || matchFrom === "") this.$like += `'%${_obj[key]}%'`
+
+  this.$query = [...this.$query, this.$where, this.$like]
+  //Reset like props to default incase like is used more than once in a query
+  this.$like = "LIKE "
+  return this
+}
+
 function order(details, order = "D") {
   let orderby
 
@@ -91,6 +105,7 @@ module.exports = {
   where,
   and,
   or,
+  like,
   order,
   limit,
 }
