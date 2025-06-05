@@ -1,6 +1,8 @@
+const dotenv = require("dotenv")
 const api = require("./model/model")
 const exec = require("./execution/execute")
 
+dotenv.config()
 //instantiate Database
 const connectionString = process.env.CONNECTION
 
