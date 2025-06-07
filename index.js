@@ -1,5 +1,5 @@
 const dotenv = require("dotenv")
-const api = require("./model/model")
+const miniOrm = require("./model/model")
 const exec = require("./execution/execute")
 
 dotenv.config()
@@ -7,14 +7,10 @@ dotenv.config()
 const connectionString = process.env.CONNECTION
 
 //instantiate model and connect to Database
-const model = api.initDB(connectionString, exec)
+const model = miniOrm.initDB(connectionString, exec)
 
 async function courses() {
-  return await model
-    .table("courses")
-    .select(["id", "name", "title"])
-    .where(["id", ">", 4])
-    .done()
+  return await model.table("courses").selectAll().done()
 }
 
 async function display() {

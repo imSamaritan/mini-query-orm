@@ -89,7 +89,7 @@ function order(details, order = "D") {
 }
 
 function limit(limit, offset = null) {
-  this.$limit = `LIMIT ${limit}`
+  this.$limit += `${limit}`
 
   if (offset) {
     this.$limit += `OFFSET ${offset}`

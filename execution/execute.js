@@ -9,8 +9,8 @@ const select = async (query, _this) => {
   }
 }
 
-const selectAll = async (query, _this) => {
-  const db = await _this.dbConnection
+const selectAll = async (query, db) => {
+  // const db = await _this.dbConnection
   const [data] = await db.execute(query)
 
   return data

@@ -2,10 +2,18 @@ const { connect } = require("../db/db")
 const methods = require("../methods/methods")
 const inspectQuery = require("debug")("mini-orm:query")
 const inspectBuilder = require("debug")("mini-orm:query-builder")
+const inspectResetProps = require("debug")("mini-orm:reset")
 
 class Database {
+  #exec
+  static #credentials
+  static #connection = null
+  static #tableName
+
   constructor(credentials, exec) {
-    this.exec = exec
+    this.#exec = exec
+    Database.#credentials = credentials
+
     this.$table = ""
     this.$method = ""
     this.$query = []
@@ -17,22 +25,37 @@ class Database {
     this.$or = "OR"
     this.$like = "LIKE "
     this.$orderBy = ""
-    this.$limit = ""
+    this.$limit = "LIMIT "
 
-    this.dbConnection = (async () => {
-      this.table(credentials.table)
-      delete credentials.table
+    this.defaultProps = {
+      $where: "WHERE ",
+      $and: "AND",
+      $or: "OR",
+      $like: "LIKE ",
+      $limit: "LIMIT ",
+    }
+  }
 
-      try {
-        return await connect(credentials)
-      } catch (error) {
-        throw error
+  static async getConnection() {
+    if ("table" in Database.#credentials) 
+      Database.#tableName = Database.#credentials.table
+    else
+      delete Database.#credentials.table
+      
+    try {
+      if (!Database.#connection) {
+        Database.#connection = await connect(Database.#credentials)
+      } else {
+        Database.#connection = null
       }
-    })()
+      return Database.#connection
+    } catch (error) {
+      throw error
+    }
   }
 
   table(tableName) {
-    this.$table = tableName
+    this.$table = tableName || Database.#tableName
     return this
   }
 
@@ -46,23 +69,29 @@ class Database {
 
         if (Array.isArray(this[prop])) {
           this[prop] = []
+        } else if (prop in this.defaultProps) {
+          this[prop] = this.defaultProps[prop]
         } else if (typeof this[prop] === "object" && this[prop] !== null) {
           this[prop] = {}
-        } else {
+        } else if (prop != "$table") {
           this[prop] = ""
         }
       }
     }
+    inspectResetProps("Reset:", this)
   }
 
   async done() {
     // this.reset()
     // return
+
+    //Get connect to database
+    const db = await Database.getConnection()
+
     const query = this.$query.join(" ") + ";"
-    const results = await this.exec[this.$method](query, this)
+    const results = await this.#exec[this.$method](query, db)
 
     this.reset()
-
     return results
   }
 }
