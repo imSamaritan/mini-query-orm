@@ -1,8 +1,8 @@
 const { connect } = require('../db/db')
 const methods = require('../methods/methods')
-const inspectQuery = require('debug')('mini-orm:query')
-const inspectBuilder = require('debug')('mini-orm:query-builder')
-const inspectResetProps = require('debug')('mini-orm:reset')
+const inspectQuery = require('debug')('miniORM:query')
+const inspectBuilder = require('debug')('miniORM:query-builder')
+const inspectResetProps = require('debug')('miniORM:reset')
 
 class MiniORM {
   #exec
