@@ -99,6 +99,13 @@ class MiniORM {
       )
     }
 
+    if (this.$method === 'insert') {
+      //reset props state
+      this.reset()
+      return this.selectAll().where(['id', results.insertId]).done()
+    }
+
+    //reset props state
     this.reset()
     return results
   }
