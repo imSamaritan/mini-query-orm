@@ -37,7 +37,7 @@ class Database {
   }
 
   static async getConnection() {
-    //Remember to set a default table name which... 
+    //Remember to set a default table name which...
     // might comes with connection settings
 
     try {
@@ -92,31 +92,26 @@ class Database {
   }
 }
 
+//Compose methods from methods.js module
 Object.assign(Database.prototype, methods)
 
-const initDB = (dsn, exec) => {
-  let index = 0
-  const credential = {}
+//Parse connection string into an object
+const getCredentialsFromURI = (URI) => {
+  URI = URI.split(";")
+  const credentials = {}
 
-  dsn = dsn.split(";")
-  dsn = dsn.map((string) => string.split("="))
-
-  const getCredentials = () => {
-    const key = dsn[index][0]
-    const value = dsn[index][1]
-    const length = dsn.length - 1
-
-    credential[key] = value
-
-    if (index === length) {
-      return credential
-    } else {
-      index += 1
-      return getCredentials()
-    }
+  for (const uriString of URI) {
+    const [key, value] = uriString.split("=")
+    credentials[key] = value
   }
-  const creds = getCredentials()
-  return new Database(creds, exec)
+
+  return credentials
+}
+
+//Database initializer
+const initDB = (URI, exec) => {
+  const credentials = getCredentialsFromURI(URI)
+  return new Database(credentials, exec)
 }
 
 module.exports = { initDB }
