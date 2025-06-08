@@ -37,9 +37,8 @@ class Database {
   }
 
   static async getConnection() {
-    if ("table" in Database.#credentials)
-      Database.#tableName = Database.#credentials.table
-    else delete Database.#credentials.table
+    //Remember to set a default table name which... 
+    // might comes with connection settings
 
     try {
       if (!Database.#connection) {
