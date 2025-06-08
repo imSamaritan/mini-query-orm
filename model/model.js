@@ -15,6 +15,8 @@ class MiniORM {
     MiniORM.#credentials = credentials
 
     this.$table = ''
+
+    this.$values = []
     this.$method = ''
     this.$query = []
 
@@ -82,10 +84,20 @@ class MiniORM {
     // return
 
     //Get connect to MiniORM
-    const db = await MiniORM.getConnection()
+    let results
 
+    const dbConnection = await MiniORM.getConnection()
     const query = this.$query.join(' ') + ';'
-    const results = await this.#exec[this.$method](query, db)
+
+    if (this.$values.length === 0) {
+      results = await this.#exec[this.$method](query, dbConnection)
+    } else {
+      results = await this.#exec[this.$method](
+        query,
+        this.$values,
+        dbConnection
+      )
+    }
 
     this.reset()
     return results
