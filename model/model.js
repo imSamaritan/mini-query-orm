@@ -1,10 +1,10 @@
-const { connect } = require("../db/db")
-const methods = require("../methods/methods")
-const inspectQuery = require("debug")("mini-orm:query")
-const inspectBuilder = require("debug")("mini-orm:query-builder")
-const inspectResetProps = require("debug")("mini-orm:reset")
+const { connect } = require('../db/db')
+const methods = require('../methods/methods')
+const inspectQuery = require('debug')('mini-orm:query')
+const inspectBuilder = require('debug')('mini-orm:query-builder')
+const inspectResetProps = require('debug')('mini-orm:reset')
 
-class Database {
+class MiniORM {
   #exec
   static #credentials
   static #connection = null
@@ -12,27 +12,27 @@ class Database {
 
   constructor(credentials, exec) {
     this.#exec = exec
-    Database.#credentials = credentials
+    MiniORM.#credentials = credentials
 
-    this.$table = ""
-    this.$method = ""
+    this.$table = ''
+    this.$method = ''
     this.$query = []
 
-    this.$select = ""
-    this.$all = ""
-    this.$where = "WHERE "
-    this.$and = "AND"
-    this.$or = "OR"
-    this.$like = "LIKE "
-    this.$orderBy = ""
-    this.$limit = "LIMIT "
+    this.$select = ''
+    this.$all = ''
+    this.$where = 'WHERE '
+    this.$and = 'AND'
+    this.$or = 'OR'
+    this.$like = 'LIKE '
+    this.$orderBy = ''
+    this.$limit = 'LIMIT '
 
     this.defaultProps = {
-      $where: "WHERE ",
-      $and: "AND",
-      $or: "OR",
-      $like: "LIKE ",
-      $limit: "LIMIT ",
+      $where: 'WHERE ',
+      $and: 'AND',
+      $or: 'OR',
+      $like: 'LIKE ',
+      $limit: 'LIMIT ',
     }
   }
 
@@ -41,50 +41,50 @@ class Database {
     // might comes with connection settings
 
     try {
-      if (!Database.#connection) {
-        Database.#connection = await connect(Database.#credentials)
+      if (!MiniORM.#connection) {
+        MiniORM.#connection = await connect(MiniORM.#credentials)
       }
-      return Database.#connection
+      return MiniORM.#connection
     } catch (error) {
       throw error
     }
   }
 
   table(tableName) {
-    this.$table = tableName || Database.#tableName
+    this.$table = tableName || MiniORM.#tableName
     return this
   }
 
   reset() {
     const props = Object.keys(this)
-    inspectQuery(`SQL: ${this.$query.join(" ")};`)
+    inspectQuery(`SQL: ${this.$query.join(' ')};`)
 
     for (const prop of props) {
-      if (prop.startsWith("$")) {
+      if (prop.startsWith('$')) {
         inspectBuilder(`builder: [${prop}] : ${this[prop]}`)
 
         if (Array.isArray(this[prop])) {
           this[prop] = []
         } else if (prop in this.defaultProps) {
           this[prop] = this.defaultProps[prop]
-        } else if (typeof this[prop] === "object" && this[prop] !== null) {
+        } else if (typeof this[prop] === 'object' && this[prop] !== null) {
           this[prop] = {}
-        } else if (prop != "$table") {
-          this[prop] = ""
+        } else if (prop != '$table') {
+          this[prop] = ''
         }
       }
     }
-    inspectResetProps("Reset:", this)
+    inspectResetProps('Reset:', this)
   }
 
   async done() {
     // this.reset()
     // return
 
-    //Get connect to database
-    const db = await Database.getConnection()
+    //Get connect to MiniORM
+    const db = await MiniORM.getConnection()
 
-    const query = this.$query.join(" ") + ";"
+    const query = this.$query.join(' ') + ';'
     const results = await this.#exec[this.$method](query, db)
 
     this.reset()
@@ -93,25 +93,25 @@ class Database {
 }
 
 //Compose methods from methods.js module
-Object.assign(Database.prototype, methods)
+Object.assign(MiniORM.prototype, methods)
 
 //Parse connection string into an object
 const getCredentialsFromURI = (URI) => {
-  URI = URI.split(";")
+  URI = URI.split(';')
   const credentials = {}
 
   for (const uriString of URI) {
-    const [key, value] = uriString.split("=")
+    const [key, value] = uriString.split('=')
     credentials[key] = value
   }
 
   return credentials
 }
 
-//Database initializer
+//MiniORM initializer
 const initDB = (URI, exec) => {
   const credentials = getCredentialsFromURI(URI)
-  return new Database(credentials, exec)
+  return new MiniORM(credentials, exec)
 }
 
 module.exports = { initDB }

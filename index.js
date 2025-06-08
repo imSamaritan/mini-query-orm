@@ -1,21 +1,49 @@
-const dotenv = require("dotenv")
-const miniOrm = require("./model/model")
-const exec = require("./execution/execute")
+const express = require('express')
+const dotenv = require('dotenv')
+const miniORM = require('./model/model')
+const exec = require('./execution/execute')
 
 dotenv.config()
-//instantiate Database
+
+const app = express()
 const connectionString = process.env.CONNECTION
+const model = miniORM.initDB(connectionString, exec).table('courses')
 
-//instantiate model and connect to Database
-const model = miniOrm.initDB(connectionString, exec)
+app.use(express.json())
 
-async function courses() {
-  return await model.table("courses").selectAll().done()
-}
+app.get('/', async (req, res) => {
+  return res.redirect('/courses')
+})
 
-async function display() {
-  const coursesList = await courses()
-  console.log(coursesList)
-}
+app.get('/courses', async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10000
 
-display()
+  try {
+    const courses = await model
+      .selectAll()
+      .order({ by: 'title' }, 'a')
+      .limit(limit)
+      .done()
+    return res.json(courses)
+  } catch (error) {
+    throw error
+  }
+})
+
+app.get('/courses/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const data = await model.selectAll().where(['title', id]).done()
+
+    return res.json(data)
+  } catch (error) {
+    throw error
+  }
+})
+
+app.post('/courses', async (req, res) => {
+  const { body } = req
+  res.json(body)
+})
+
+app.listen(4500, () => console.log('Server started...4500'))
