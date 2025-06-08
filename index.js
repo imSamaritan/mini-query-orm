@@ -43,7 +43,9 @@ app.get('/courses/:id', async (req, res) => {
 
 app.post('/courses', async (req, res) => {
   const { body } = req
-  res.json(body)
+  const course = await model.insert(body).done()
+
+  res.json(course)
 })
 
 app.listen(4500, () => console.log('Server started...4500'))

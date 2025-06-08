@@ -1,8 +1,8 @@
 function select(column) {
-  this.$method = "select"
+  this.$method = 'select'
 
   if (Array.isArray(column)) {
-    column = column.join(", ")
+    column = column.join(', ')
   }
 
   this.$select = `SELECT ${column} FROM ${this.$table}`
@@ -12,7 +12,7 @@ function select(column) {
 }
 
 function selectAll() {
-  this.$method = "selectAll"
+  this.$method = 'selectAll'
 
   this.$select = `SELECT`
   this.$all = `* FROM ${this.$table}`
@@ -21,12 +21,31 @@ function selectAll() {
   return this
 }
 
+function insert(data) {
+  this.$method = 'insert'
+  // {name: "imsamaritan", title: "My Title", isPublished: 1}
+  const columnsFromKeys = Object.keys(data)
+  const valuesPlaceholder = columnsFromKeys.map((column) => '?')
+
+  for (const key of columnsFromKeys) {
+    this.$values.push(data[key])
+  }
+
+  this.$insert = `
+    INSERT INTO ${this.$table} (${columnsFromKeys.join(' ,')})
+    VALUES (${valuesPlaceholder.join(' ,')})
+  `
+
+  this.$query = [this.$insert]
+  return this
+}
+
 function where(_where = []) {
   const _length = _where.length
 
   if (_length < 1) {
     console.log(
-      "[field, operator, value] or [field, value] required in where()"
+      '[field, operator, value] or [field, value] required in where()'
     )
     return this
   } else if (_length === 2) {
@@ -42,13 +61,13 @@ function where(_where = []) {
 }
 
 function and() {
-  this.$where = ""
+  this.$where = ''
   this.$query = [...this.$query, this.$and]
   return this
 }
 
 function or() {
-  this.$where = ""
+  this.$where = ''
   this.$query = [...this.$query, this.$or]
   return this
 }
@@ -57,27 +76,27 @@ function like(_obj, matchFrom) {
   const [key] = Object.keys(_obj)
   this.$where += key
 
-  if (matchFrom === "start") this.$like += `'${_obj[key]}%'`
-  if (matchFrom === "end") this.$like += `'%${_obj[key]}'`
-  if (!matchFrom || matchFrom === "") this.$like += `'%${_obj[key]}%'`
+  if (matchFrom === 'start') this.$like += `'${_obj[key]}%'`
+  if (matchFrom === 'end') this.$like += `'%${_obj[key]}'`
+  if (!matchFrom || matchFrom === '') this.$like += `'%${_obj[key]}%'`
 
   this.$query = [...this.$query, this.$where, this.$like]
   //Reset like props to default incase like is used more than once in a query
-  this.$like = "LIKE "
+  this.$like = 'LIKE '
   return this
 }
 
-function order(details, order = "D") {
+function order(details, order = 'D') {
   let orderby
 
-  if (order.toLocaleUpperCase() === "A") {
+  if (order.toLocaleUpperCase() === 'A') {
     order = `ASC`
   } else {
     order = `DESC`
   }
 
   if (Array.isArray(details.by)) {
-    orderby = details.by.join(", ")
+    orderby = details.by.join(', ')
   } else {
     orderby = details.by
   }
@@ -102,6 +121,7 @@ function limit(limit, offset = null) {
 module.exports = {
   select,
   selectAll,
+  insert,
   where,
   and,
   or,

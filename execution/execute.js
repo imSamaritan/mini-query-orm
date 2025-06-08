@@ -16,8 +16,13 @@ const selectAll = async (query, db) => {
   return data
 }
 
-const insert = async (query, values, _this) => {
-  console.log("Insert")
+const insert = async (query, values, db) => {
+  try {
+    const [results] = await db.execute(query, values)
+    return results
+  } catch (error) {
+    throw error
+  }
 }
 
 module.exports = { select, selectAll, insert }
