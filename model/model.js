@@ -37,17 +37,11 @@ class Database {
   }
 
   static async getConnection() {
-    if ("table" in Database.#credentials) 
-      Database.#tableName = Database.#credentials.table
-    else
-      delete Database.#credentials.table
-      
     try {
       if (!Database.#connection) {
         Database.#connection = await connect(Database.#credentials)
-      } else {
-        Database.#connection = null
       }
+
       return Database.#connection
     } catch (error) {
       throw error
