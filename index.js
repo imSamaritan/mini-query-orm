@@ -59,4 +59,17 @@ app.delete('/courses/:id', async (req, res) => {
   }
 })
 
+app.put('/courses/:id', async (req, res) => {
+  const id = parseInt(req.params.id)
+  const { body } = req
+  
+  try {
+    const data = await model.update(body).where(['id', id]).done()
+
+    return res.json(data)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 app.listen(4500, () => console.log('Server started...4500'))

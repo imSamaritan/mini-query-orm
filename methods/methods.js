@@ -40,6 +40,22 @@ function insert(data) {
   return this
 }
 
+function update(data = {}) {
+  this.$method = 'update'
+
+  const keys = Object.keys(data)
+  const fields = keys.map((column) => `${column} = ?`)
+
+  for (const key of keys) {
+    this.$values.push(data[key])
+  }
+
+  this.$update += `${this.$table} SET ${fields.join(', ')}`
+  this.$query = [this.$update]
+
+  return this
+}
+
 function _delete() {
   this.$method = '_delete'
 
@@ -131,6 +147,7 @@ module.exports = {
   select,
   selectAll,
   insert,
+  update,
   _delete,
   where,
   and,

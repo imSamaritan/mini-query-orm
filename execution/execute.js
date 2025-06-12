@@ -20,7 +20,18 @@ const insert = async (query, values, db) => {
   try {
     const [results] = await db.execute(query, values)
     return results
-  } catch (error) {
+  }
+  catch (error) {
+    throw error
+  }
+}
+
+const update = async (query, values, db) => {
+  try {
+    const [results] = await db.execute(query, values)
+    return results
+  }
+  catch (error) {
     throw error
   }
 }
@@ -29,9 +40,10 @@ const _delete = async (query, db) => {
   try {
     const results = await db.execute(query)
     return results
-  } catch (error) {
+  }
+  catch (error) {
     throw error
   }
 }
 
-module.exports = { select, selectAll, insert, _delete }
+module.exports = { select, selectAll, insert, update, _delete }
