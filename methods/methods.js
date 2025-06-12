@@ -40,6 +40,15 @@ function insert(data) {
   return this
 }
 
+function _delete() {
+  this.$method = '_delete'
+
+  this.$_delete += `${this.$table}`
+  this.$query = [this.$_delete]
+
+  return this
+}
+
 function where(_where = []) {
   const _length = _where.length
 
@@ -122,6 +131,7 @@ module.exports = {
   select,
   selectAll,
   insert,
+  _delete,
   where,
   and,
   or,

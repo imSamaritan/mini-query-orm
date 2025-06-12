@@ -28,6 +28,7 @@ class MiniORM {
     this.$like = 'LIKE '
     this.$orderBy = ''
     this.$limit = 'LIMIT '
+    this.$_delete = 'DELETE FROM '
 
     this.defaultProps = {
       $where: 'WHERE ',
@@ -35,6 +36,7 @@ class MiniORM {
       $or: 'OR',
       $like: 'LIKE ',
       $limit: 'LIMIT ',
+      $_delete: 'DELETE FROM ',
     }
   }
 
