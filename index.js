@@ -16,12 +16,12 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/courses', async (req, res) => {
-  const limit = parseInt(req.query.limit) || 10000
+  const limit = parseInt(req.query.limit) || 1000000
 
   try {
     const courses = await model
       .selectAll()
-      .order({ by: 'title' }, 'a')
+      .order({ by: 'title' })
       .limit(limit)
       .done()
     return res.json(courses)
@@ -33,7 +33,7 @@ app.get('/courses', async (req, res) => {
 app.get('/courses/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id)
-    const data = await model.selectAll().where(['title', id]).done()
+    const data = await model.selectAll().where(['id', id]).done()
 
     return res.json(data)
   } catch (error) {
