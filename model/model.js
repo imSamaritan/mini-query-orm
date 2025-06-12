@@ -28,6 +28,7 @@ class MiniORM {
     this.$like = 'LIKE '
     this.$orderBy = ''
     this.$limit = 'LIMIT '
+    this.$update = 'UPDATE  '
     this.$_delete = 'DELETE FROM '
 
     this.defaultProps = {
@@ -37,6 +38,7 @@ class MiniORM {
       $like: 'LIKE ',
       $limit: 'LIMIT ',
       $_delete: 'DELETE FROM ',
+      $update: `UPDATE ${this.$table} SET `,
     }
   }
 
