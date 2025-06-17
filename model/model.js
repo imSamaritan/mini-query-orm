@@ -38,7 +38,7 @@ class MiniORM {
       $like: 'LIKE ',
       $limit: 'LIMIT ',
       $_delete: 'DELETE FROM ',
-      $update: `UPDATE ${this.$table} SET `,
+      $update: 'UPDATE  ',
     }
   }
 
