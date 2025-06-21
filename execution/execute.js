@@ -35,9 +35,9 @@ const update = async (query, db, values = []) => {
   }
 }
 
-const _delete = async (query, db) => {
+const _delete = async (query, db, values = []) => {
   try {
-    const results = await db.execute(query)
+    const results = await db.execute(query, values)
     return results
   } catch (error) {
     throw error
