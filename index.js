@@ -16,13 +16,10 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/courses', async (req, res) => {
-  const limit = parseInt(req.query.limit) || 1000000
-
   try {
     const courses = await model
       .selectAll()
-      .order({ by: 'title' })
-      .limit(limit)
+      .where({ id: 31, operator: '=' })
       .done()
     return res.json(courses)
   } catch (error) {
@@ -62,7 +59,7 @@ app.delete('/courses/:id', async (req, res) => {
 app.put('/courses/:id', async (req, res) => {
   const id = parseInt(req.params.id)
   const { body } = req
-  
+
   try {
     const data = await model.update(body).where(['id', id]).done()
 

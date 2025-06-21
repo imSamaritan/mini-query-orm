@@ -9,19 +9,21 @@ const select = async (query, _this) => {
   }
 }
 
-const selectAll = async (query, db) => {
+const selectAll = async (query, db, values = []) => {
   // const db = await _this.dbConnection
-  const [data] = await db.execute(query)
-
-  return data
+  try {
+    const [data] = await db.execute(query, values)
+    return data
+  } catch (error) {
+    throw error
+  }
 }
 
 const insert = async (query, values, db) => {
   try {
     const [results] = await db.execute(query, values)
     return results
-  }
-  catch (error) {
+  } catch (error) {
     throw error
   }
 }
@@ -30,8 +32,7 @@ const update = async (query, values, db) => {
   try {
     const [results] = await db.execute(query, values)
     return results
-  }
-  catch (error) {
+  } catch (error) {
     throw error
   }
 }
@@ -40,8 +41,7 @@ const _delete = async (query, db) => {
   try {
     const results = await db.execute(query)
     return results
-  }
-  catch (error) {
+  } catch (error) {
     throw error
   }
 }

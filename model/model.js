@@ -98,8 +98,8 @@ class MiniORM {
     } else {
       results = await this.#exec[this.$method](
         query,
-        this.$values,
-        dbConnection
+        dbConnection,
+        this.$values
       )
     }
 
