@@ -30,11 +30,16 @@ app.get('/courses', async (req, res) => {
 app.get('/courses/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id)
-    const data = await model.selectAll().where(['id', id]).done()
+    const data = await model
+      .select(['id', 'name', 'title'])
+      .where({ id, operator: '>=' })
+      .or()
+      .where({ id: id + 2 })
+      .done()
 
     return res.json(data)
   } catch (error) {
-    throw error
+    console.log(error.message)
   }
 })
 
