@@ -1,8 +1,6 @@
-const select = async (query, _this) => {
+const select = async (query, db, values = []) => {
   try {
-    const db = await _this.dbConnection
-    const [data] = await db.execute(query)
-
+    const [data] = await db.execute(query, values)
     return data
   } catch (error) {
     throw new Error(error)
