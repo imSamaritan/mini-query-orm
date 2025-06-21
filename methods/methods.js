@@ -65,20 +65,28 @@ function _delete() {
   return this
 }
 
-function where(_where = []) {
-  const _length = _where.length
+function where(_where = {}) {
+  let config = Object.keys(_where)
 
-  if (_length < 1) {
-    console.log(
-      '[field, operator, value] or [field, value] required in where()'
-    )
+  if (config.length < 1) {
+    console.log('Field and value require {columName:value}')
     return this
-  } else if (_length === 2) {
-    const [column, value] = _where
-    this.$where += `${column} = '${value}'`
-  } else if (_length === 3) {
-    const [column, operator, value] = _where
-    this.$where += `${column} ${operator} '${value}'`
+  }
+  else if ('operator' in _where) {
+    config = config.filter((key) => key != 'operator')
+    const column = config[0]
+    const value = _where[config[0]]
+    const { operator } = _where
+
+    this.$where += `${column} ${operator} ?`
+    this.$values.push(value)
+  }
+  else {
+    const column = config[0]
+    const value = _where[config[0]]
+
+    this.$where += `${column} = ?`
+    this.$values.push(value)
   }
 
   this.$query = [...this.$query, this.$where]
