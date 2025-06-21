@@ -48,7 +48,7 @@ app.post('/courses', async (req, res) => {
 app.delete('/courses/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id)
-    const data = await model._delete().where(['id', id]).done()
+    const data = await model._delete().where({ id }).done()
 
     return res.json(data)
   } catch (error) {
