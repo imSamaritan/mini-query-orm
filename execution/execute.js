@@ -19,7 +19,7 @@ const selectAll = async (query, db, values = []) => {
   }
 }
 
-const insert = async (query, values, db) => {
+const insert = async (query, db, values = []) => {
   try {
     const [results] = await db.execute(query, values)
     return results
