@@ -17,10 +17,7 @@ app.get('/', async (req, res) => {
 
 app.get('/courses', async (req, res) => {
   try {
-    const courses = await model
-      .selectAll()
-      .where({ id: 31, operator: '=' })
-      .done()
+    const courses = await model.selectAll().done()
     return res.json(courses)
   } catch (error) {
     throw error
@@ -31,10 +28,8 @@ app.get('/courses/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id)
     const data = await model
-      .select(['id', 'name', 'title'])
-      .where({ id, operator: '>=' })
-      .or()
-      .where({ id: id + 2 })
+      .select(['id', 'name', 'title', 'isPublished'])
+      .where({ id })
       .done()
 
     return res.json(data)
@@ -66,7 +61,7 @@ app.put('/courses/:id', async (req, res) => {
   const { body } = req
 
   try {
-    const data = await model.update(body).where(['id', id]).done()
+    const data = await model.update(body).where({ id }).done()
 
     return res.json(data)
   } catch (error) {
